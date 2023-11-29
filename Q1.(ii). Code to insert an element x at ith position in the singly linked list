@@ -1,0 +1,59 @@
+#include <iostream>
+struct Node {
+    int data;
+    Node* next;
+
+    Node(int value) : data(value), next(nullptr) {}
+};
+
+class LinkedList {
+private:
+    Node* head;
+
+public:
+    LinkedList() : head(nullptr) {}
+
+    void insertAtPosition(int value, int position) {
+        Node* newNode = new Node(value);
+        if (position == 1) {
+            newNode->next = head;
+            head = newNode;
+            return;
+        }
+
+        Node* current = head;
+        for (int i = 1; i < position - 1 && current != nullptr; ++i) {
+            current = current->next;
+        }
+
+        if (current == nullptr)
+            return;
+
+        newNode->next = current->next;
+        current->next = newNode;
+    }
+
+    void display() {
+        Node* current = head;
+
+        while (current != nullptr) {
+            std::cout << current->data << " ";
+            current = current->next;
+        }
+
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    LinkedList myList;
+
+    myList.insertAtPosition(3, 1);  // Insert 3 at the beginning
+    myList.insertAtPosition(7, 2);  // Insert 7 at position 2
+    myList.insertAtPosition(1, 2);  // Insert 1 at position 2
+
+    std::cout << "Linked List: ";
+    myList.display();
+
+    return 0;
+}
