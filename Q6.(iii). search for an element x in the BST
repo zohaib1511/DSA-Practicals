@@ -1,0 +1,80 @@
+#include <iostream>
+
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+class BinarySearchTree {
+private:
+    TreeNode* root; 
+
+public:
+    BinarySearchTree() : root(nullptr) {}
+
+    bool search(int value) {
+        return searchRecursive(root, value);
+    }
+
+    bool searchRecursive(TreeNode* root, int value) {
+        if (root == nullptr || root->data == value) {
+            return root != nullptr; 
+        }
+
+        if (value < root->data) {
+            return searchRecursive(root->left, value);
+        } else {
+            return searchRecursive(root->right, value);
+        }
+    }
+
+    void insert(int value) {
+        root = insertRecursive(root, value);
+        std::cout << "Element " << value << " inserted into the Binary Search Tree." << std::endl;
+    }
+
+    TreeNode* insertRecursive(TreeNode* root, int value) {
+        if (root == nullptr) {
+            return new TreeNode(value);
+        }
+
+        if (value < root->data) {
+            root->left = insertRecursive(root->left, value);
+        } else if (value > root->data) {
+            root->right = insertRecursive(root->right, value);
+        }
+
+        return root;
+    }
+};
+
+int main() {
+    BinarySearchTree myBST;
+    myBST.insert(50);
+    myBST.insert(30);
+    myBST.insert(20);
+    myBST.insert(40);
+    myBST.insert(70);
+    myBST.insert(60);
+    myBST.insert(80);
+
+    int searchValue1 = 30;
+    int searchValue2 = 90;
+    if (myBST.search(searchValue1)) {
+        std::cout << "Element " << searchValue1 << " found in the Binary Search Tree." << std::endl;
+    } else {
+        std::cout << "Element " << searchValue1 << " not found in the Binary Search Tree." << std::endl;
+    }
+
+    if (myBST.search(searchValue2)) {
+        std::cout << "Element " << searchValue2 << " found in the Binary Search Tree." << std::endl;
+    } else {
+        std::cout << "Element " << searchValue2 << " not found in the Binary Search Tree." << std::endl;
+    }
+
+    return 0;
+}
+
