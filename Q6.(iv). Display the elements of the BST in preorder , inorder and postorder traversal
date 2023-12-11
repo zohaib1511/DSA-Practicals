@@ -1,0 +1,97 @@
+#include <iostream>
+
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+class BinarySearchTree {
+private:
+    TreeNode* root; 
+
+public:
+    BinarySearchTree() : root(nullptr) {}
+
+    void insert(int value) {
+        root = insertRecursive(root, value);
+        std::cout << "Element " << value << " inserted into the Binary Search Tree." << std::endl;
+    }
+
+    TreeNode* insertRecursive(TreeNode* root, int value) {
+        if (root == nullptr) {
+            return new TreeNode(value);
+        }
+
+        if (value < root->data) {
+            root->left = insertRecursive(root->left, value);
+        } else if (value > root->data) {
+            root->right = insertRecursive(root->right, value);
+        }
+
+        return root;
+    }
+
+    void preorder() {
+        std::cout << "Preorder Traversal: ";
+        preorderRecursive(root);
+        std::cout << std::endl;
+    }
+
+    void preorderRecursive(TreeNode* root) {
+        if (root != nullptr) {
+            std::cout << root->data << " ";
+            preorderRecursive(root->left);
+            preorderRecursive(root->right);
+        }
+    }
+
+    void inorder() {
+        std::cout << "Inorder Traversal: ";
+        inorderRecursive(root);
+        std::cout << std::endl;
+    }
+
+    void inorderRecursive(TreeNode* root) {
+        if (root != nullptr) {
+            inorderRecursive(root->left);
+            std::cout << root->data << " ";
+            inorderRecursive(root->right);
+        }
+    }
+
+    void postorder() {
+        std::cout << "Postorder Traversal: ";
+        postorderRecursive(root);
+        std::cout << std::endl;
+    }
+
+    void postorderRecursive(TreeNode* root) {
+        if (root != nullptr) {
+            postorderRecursive(root->left);
+            postorderRecursive(root->right);
+            std::cout << root->data << " ";
+        }
+    }
+};
+
+int main() {
+    BinarySearchTree myBST;
+
+    myBST.insert(50);
+    myBST.insert(30);
+    myBST.insert(20);
+    myBST.insert(40);
+    myBST.insert(70);
+    myBST.insert(60);
+    myBST.insert(80);
+
+    myBST.preorder();
+    myBST.inorder();
+    myBST.postorder();
+
+    return 0;
+}
+
