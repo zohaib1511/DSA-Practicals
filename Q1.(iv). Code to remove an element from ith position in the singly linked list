@@ -1,0 +1,64 @@
+#include <iostream>
+
+// Node structure to represent each element in the singly linked list
+struct Node {
+    int data;
+    Node* next;
+
+    // Constructor to initialize a node with given data and nullptr as next
+    Node(int value) : data(value), next(nullptr) {}
+};
+
+// LinkedList class to represent the singly linked list ADT
+class LinkedList {
+private:
+    Node* head; // Pointer to the first node in the linked list
+
+public:
+    // Constructor to initialize an empty linked list
+    LinkedList() : head(nullptr) {}
+
+    // Function to remove an element from the ith position in the linked list
+    void removeFromPosition(int position) {
+        // If the list is empty, do nothing
+        if (head == nullptr) {
+            std::cout << "List is empty. Cannot remove from an empty list." << std::endl;
+            return;
+        }
+
+        // If removing from the beginning
+        if (position == 1) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+
+        // Traverse to the node at position - 1
+        Node* current = head;
+        Node* previous = nullptr;
+
+        for (int i = 1; i < position && current != nullptr; ++i) {
+            previous = current;
+            current = current->next;
+        }
+
+        // If the position is invalid (beyond the end of the list), do nothing
+        if (current == nullptr) {
+            std::cout << "Invalid position. Element not removed." << std::endl;
+            return;
+        }
+
+        // Update the pointers to bypass the current node
+        if (previous != nullptr) {
+            previous->next = current->next;
+        } else {
+            // If previous is nullptr, it means we are removing the first node
+            head = current->next;
+        }
+
+        // Delete the original node
+        delete current;
+    }
+
+    // Function to display the elements of the lin
