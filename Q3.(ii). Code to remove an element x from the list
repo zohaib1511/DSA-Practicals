@@ -1,0 +1,123 @@
+#include <iostream>
+
+struct Node {
+    int data;
+    Node* next;
+
+    Node(int value) : data(value), next(nullptr) {}
+};
+
+class CircularLinkedList {
+private:
+    Node* head; 
+
+public:
+    
+    CircularLinkedList() : head(nullptr) {}
+
+    void insert(int value) {
+        
+        Node* newNode = new Node(value);
+
+        if (head == nullptr) {
+            head = newNode;
+            head->next = head;
+        } else {
+           
+            Node* current = head;
+            while (current->next != head) {
+                current = current->next;
+            }
+
+            current->next = newNode;
+
+            newNode->next = head;
+        }
+    }
+
+    void remove(int value) {
+        
+        if (head == nullptr) {
+            std::cout << "Circular Linked List is empty. Cannot remove." << std::endl;
+            return;
+        }
+
+        Node* current = head;
+        Node* previous = nullptr;
+
+        do {
+           
+            if (current->data == value) {
+                if (previous != nullptr) {
+                   
+                    previous->next = current->next;
+
+                    if (current == head) {
+                        head = current->next;
+                    }
+
+                    delete current;
+
+                    std::cout << "Element " << value << " removed from the list." << std::endl;
+                    return;
+                } else {
+                    
+                    Node* lastNode = head;
+                    while (lastNode->next != head) {
+                        lastNode = lastNode->next;
+                    }
+
+                    lastNode->next = current->next;
+
+                    head = current->next;
+
+                    delete current;
+
+                    std::cout << "Element " << value << " removed from the list." << std::endl;
+                    return;
+                }
+            }
+
+            previous = current;
+            current = current->next;
+        } while (current != head);
+
+        std::cout << "Element " << value << " not found in the list." << std::endl;
+    }
+
+    void display() {
+       
+        if (head == nullptr) {
+            std::cout << "Circular Linked List is empty." << std::endl;
+            return;
+        }
+
+        Node* current = head;
+
+        do {
+            std::cout << current->data << " ";
+            current = current->next;
+        } while (current != head);
+
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    
+    CircularLinkedList myList;
+
+    myList.insert(3);
+    myList.insert(7);
+    myList.insert(1);
+
+    std::cout << "Circular Linked List: ";
+    myList.display();
+
+    myList.remove(7);
+    myList.remove(10); 
+    std::cout << "Circular Linked List after removal: ";
+    myList.display();
+
+    return 0;
+}
