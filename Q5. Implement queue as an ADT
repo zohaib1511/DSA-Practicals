@@ -1,0 +1,55 @@
+#include <iostream>
+#include <queue>
+
+class Queue {
+private:
+    std::queue<int> data;
+
+public:
+    void enqueue(int value) {
+        data.push(value);
+        std::cout << "Enqueued: " << value << std::endl;
+    }
+
+    void dequeue() {
+        if (!data.empty()) {
+            int frontValue = data.front();
+            data.pop();
+            std::cout << "Dequeued: " << frontValue << std::endl;
+        } else {
+            std::cout << "Queue is empty. Cannot dequeue." << std::endl;
+        }
+    }
+
+    void display() {
+        if (data.empty()) {
+            std::cout << "Queue is empty." << std::endl;
+        } else {
+            std::cout << "Queue: ";
+            std::queue<int> temp = data; 
+            while (!temp.empty()) {
+                std::cout << temp.front() << " ";
+                temp.pop();
+            }
+            std::cout << std::endl;
+        }
+    }
+};
+
+int main() {
+    Queue myQueue;
+
+    myQueue.enqueue(5);
+    myQueue.enqueue(10);
+    myQueue.enqueue(15);
+
+    myQueue.display();
+
+    myQueue.dequeue();
+    myQueue.dequeue();
+    myQueue.dequeue();
+
+    myQueue.display();
+
+    return 0;
+}
