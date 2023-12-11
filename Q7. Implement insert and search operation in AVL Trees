@@ -1,0 +1,155 @@
+#include <iostream>
+#include <algorithm>
+
+struct AVLNode {
+    int data;
+    AVLNode* left;
+    AVLNode* right;
+    int height;
+
+    AVLNode(int value) : data(value), left(nullptr), right(nullptr), height(1) {}
+};
+
+class AVLTree {
+private:
+    AVLNode* root; 
+public:
+    AVLTree() : root(nullptr) {}
+
+    int getHeight(AVLNode* node) {
+        if (node == nullptr) {
+            return 0;
+        }
+        return node->height;
+    }
+
+    int getBalance(AVLNode* node) {
+        if (node == nullptr) {
+            return 0;
+        }
+        return getHeight(node->left) - getHeight(node->right);
+    }
+
+    AVLNode* insert(AVLNode* node, int value) {
+        if (node == nullptr) {
+            return new AVLNode(value);
+        }
+
+        if (value < node->data) {
+            node->left = insert(node->left, value);
+        } else if (value > node->data) {
+            node->right = insert(node->right, value);
+        } else {
+            return node;
+        }
+
+        node->height = 1 + std::max(getHeight(node->left), getHeight(node->right));
+
+        int balance = getBalance(node);
+
+        if (balance > 1 && value < node->left->data) {
+            return rotateRight(node);
+        }
+
+        if (balance < -1 && value > node->right->data) {
+            return rotateLeft(node);
+        }
+
+        if (balance > 1 && value > node->left->data) {
+            node->left = rotateLeft(node->left);
+            return rotateRight(node);
+        }
+
+        if (balance < -1 && value < node->right->data) {
+            node->right = rotateRight(node->right);
+            return rotateLeft(node);
+        }
+
+        return node;
+    }
+
+    AVLNode* rotateLeft(AVLNode* y) {
+        AVLNode* x = y->right;
+        AVLNode* T2 = x->left;
+
+        x->left = y;
+        y->right = T2;
+
+        y->height = 1 + std::max(getHeight(y->left), getHeight(y->right));
+        x->height = 1 + std::max(getHeight(x->left), getHeight(x->right));
+
+        return x;
+    }
+
+    AVLNode* rotateRight(AVLNode* x) {
+        AVLNode* y = x->left;
+        AVLNode* T2 = y->right;
+
+        y->right = x;
+        x->left = T2;
+
+        x->height = 1 + std::max(getHeight(x->left), getHeight(x->right));
+        y->height = 1 + std::max(getHeight(y->left), getHeight(y->right));
+
+        return y;
+    }
+
+    AVLNode* search(AVLNode* node, int value) {
+        if (node == nullptr || node->data == value) {
+            return node;
+        }
+
+        if (value > node->data) {
+            return search(node->right, value);
+        }
+
+        return search(node->left, value);
+    }
+
+    void insert(int value) {
+        root = insert(root, value);
+        std::cout << "Element " << value << " inserted into the AVL Tree." << std::endl;
+    }
+
+    void search(int value) {
+        AVLNode* result = search(root, value);
+        if (result != nullptr) {
+            std::cout << "Element " << value << " found in the AVL Tree." << std::endl;
+        } else {
+            std::cout << "Element " << value << " not found in the AVL Tree." << std::endl;
+        }
+    }
+
+    void inorder() {
+        std::cout << "Inorder Traversal: ";
+        inorderRecursive(root);
+        std::cout << std::endl;
+    }
+
+    void inorderRecursive(AVLNode* root) {
+        if (root != nullptr) {
+            inorderRecursive(root->left);
+            std::cout << root->data << " ";
+            inorderRecursive(root->right);
+        }
+    }
+};
+
+int main() {
+    AVLTree myAVL;
+
+    myAVL.insert(50);
+    myAVL.insert(30);
+    myAVL.insert(20);
+    myAVL.insert(40);
+    myAVL.insert(70);
+    myAVL.insert(60);
+    myAVL.insert(80);
+
+    myAVL.search(30);
+    myAVL.search(90);
+
+    myAVL.inorder();
+
+    return 0;
+}
