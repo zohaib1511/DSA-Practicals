@@ -1,0 +1,68 @@
+#include <iostream>
+
+struct Node {
+    int data;
+    Node* prev;
+    Node* next;
+
+    Node(int value) : data(value), prev(nullptr), next(nullptr) {}
+};
+
+class DoublyLinkedList {
+private:
+    Node* head; 
+
+public:
+    
+    DoublyLinkedList() : head(nullptr) {}
+
+    void removeFromBeginning() {
+       
+        if (head == nullptr) {
+            std::cout << "List is empty. Cannot remove from an empty list." << std::endl;
+            return;
+        }
+
+        Node* temp = head;
+
+        head = head->next;
+
+        if (head != nullptr) {
+            head->prev = nullptr;
+        }
+
+        delete temp;
+    }
+
+    void display() {
+        Node* current = head;
+
+        while (current != nullptr) {
+            std::cout << current->data << " ";
+            current = current->next;
+        }
+
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    
+    DoublyLinkedList myList;
+
+    myList.removeFromBeginning(); // Try to remove from an empty list
+
+    myList.insertAtEnd(3);
+    myList.insertAtEnd(7);
+    myList.insertAtEnd(1);
+
+    std::cout << "Doubly Linked List: ";
+    myList.display();
+
+    myList.removeFromBeginning();
+
+    std::cout << "Doubly Linked List after removal: ";
+    myList.display();
+
+    return 0;
+}
